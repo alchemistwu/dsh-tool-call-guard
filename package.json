@@ -31,5 +31,8 @@
     "bundle": {
       "patch": "./cordis.patch.yml"
     }
+  },
+  "scripts": {
+    "test": "node test/guard.test.mjs"
   }
 }
