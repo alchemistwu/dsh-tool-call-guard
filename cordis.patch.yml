@@ -1,0 +1,4 @@
+# Bundle patch layer: registers the tool-call-guard host plugin. Zero config.
+- insert:
+    - id: tool-call-guard
+      name: dsh-tool-call-guard

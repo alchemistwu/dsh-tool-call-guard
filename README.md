@@ -59,15 +59,7 @@ dsh plugin --profile web add github:alchemistwu/dsh-tool-call-guard
 dsh plugin --profile desktop add github:alchemistwu/dsh-tool-call-guard
 ```
 
-The plugin has no bundle patch of its own; add the insert entry to your profile's `cordis.patch.yml`:
-
-```yaml
-- insert:
-    - id: tool-call-guard
-      name: dsh-tool-call-guard
-```
-
-Restart your `dsh web` / DSH Desktop host, then start a new session.
+The package declares a `dsh.bundle` patch, so the plugin self-registers on install. Restart your `dsh web` / DSH Desktop host, then start a new session.
 
 ## Observed in production
 
