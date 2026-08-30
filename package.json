@@ -1,6 +1,6 @@
 {
   "name": "dsh-tool-call-guard",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "main": "src/tool-call-guard.js",
   "description": "Neutralize tool calls with invalid JSON arguments on the wire, so one malformed model generation cannot brick a session against strict OpenAI-compatible servers (vLLM et al).",
@@ -20,7 +20,10 @@
   "author": "Junzheng Wu <alchemistwu0521@gmail.com>",
   "files": [
     "src",
+    "examples",
     "README.md",
+    "README.zh.md",
+    "CHANGELOG.md",
     "LICENSE",
     "cordis.patch.yml"
   ],
