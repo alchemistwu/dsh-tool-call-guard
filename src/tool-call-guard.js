@@ -66,6 +66,7 @@ export function apply(ctx) {
 
   ctx.on('llm/stream', (options, next) => {
     try {
+
       const messages = options?.messages
       if (!Array.isArray(messages) || messages.length === 0) return next(options)
 
@@ -82,8 +83,12 @@ export function apply(ctx) {
       })
       if (droppedIds.size === 0) return next(options)
 
-      // Pass 2: rewrite on the wire.
-      const cleaned = messages.map((message, index) => {
+      // Pass 2: rewrite IN PLACE. cordis waterfall semantics: next() discards
+      // its arguments — the dispatch closure is invoked with the ORIGINAL argv.
+      // The only way an interceptor can change what the adapter receives is
+      // mutating the argv object itself (options.messages is an array we can
+      // splice).
+      messages.forEach((message, index) => {
         // Re-express tool-result messages whose call was invalid.
         if (message?.role === 'user' && Array.isArray(message.content)) {
           const result = message.content.find((b) => b?.type === 'tool-result')
@@ -94,10 +99,10 @@ export function apply(ctx) {
               const text =
                 `[Tool Result: ${tool}] ` +
                 (flattenResultText(result.content) || '(no output)')
-              return { ...message, content: [{ type: 'text', text }] }
+              message.content = [{ type: 'text', text }]
             }
           }
-          return message
+          return
         }
 
         // Replace invalid tool-call blocks with an honest record: what was
@@ -105,10 +110,10 @@ export function apply(ctx) {
         // can see its own mistake and re-issue a corrected call. The raw text
         // is safe here — text blocks are plain strings on the wire, escaped
         // by the adapter's serializer; no JSON parsing is involved.
-        if (message?.role !== 'assistant') return message
+        if (message?.role !== 'assistant') return
         const bad = badByIndex.get(index)
-        if (bad === undefined) return message
-        const content = message.content.map((block) => {
+        if (bad === undefined) return
+        message.content = message.content.map((block) => {
           if (block?.type !== 'tool-call' || !bad.has(String(block.id))) {
             return block
           }
@@ -119,7 +124,6 @@ export function apply(ctx) {
               `Original arguments as emitted: ${String(block.arguments)}]`,
           }
         })
-        return { ...message, content }
       })
 
       for (const [id, tool] of droppedIds) {
@@ -127,7 +131,7 @@ export function apply(ctx) {
           `tool-call-guard: neutralized tool call ${id} (${tool}) — invalid JSON arguments replaced with an explanatory note on the wire`,
         )
       }
-      return next({ ...options, messages: cleaned })
+      return next()
     } catch (error) {
       // The guard must never break the request.
       ctx.logger.warn(`tool-call-guard: pass-through after error: ${String(error)}`)
