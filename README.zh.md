@@ -54,10 +54,12 @@
 ## 安装
 
 ```sh
-dsh plugin --profile web add github:alchemistwu/dsh-tool-call-guard
+dsh plugin --profile web add dsh-tool-call-guard
 # 或 desktop：
-dsh plugin --profile desktop add github:alchemistwu/dsh-tool-call-guard
+dsh plugin --profile desktop add dsh-tool-call-guard
 ```
+
+或从 GitHub 安装：`dsh plugin add github:alchemistwu/dsh-tool-call-guard`。
 
 包内声明了 `dsh.bundle` patch，安装即自动注册。重启 `dsh web` / DSH Desktop 后开新 session 生效。
 

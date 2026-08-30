@@ -54,10 +54,12 @@ The orphaned-result-as-user-message pattern follows the upstream serializer disc
 ## Install
 
 ```sh
-dsh plugin --profile web add github:alchemistwu/dsh-tool-call-guard
+dsh plugin --profile web add dsh-tool-call-guard
 # or desktop:
-dsh plugin --profile desktop add github:alchemistwu/dsh-tool-call-guard
+dsh plugin --profile desktop add dsh-tool-call-guard
 ```
+
+Or from GitHub: `dsh plugin add github:alchemistwu/dsh-tool-call-guard`.
 
 The package declares a `dsh.bundle` patch, so the plugin self-registers on install. Restart your `dsh web` / DSH Desktop host, then start a new session.
 
