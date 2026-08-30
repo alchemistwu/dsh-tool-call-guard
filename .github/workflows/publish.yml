@@ -1,0 +1,33 @@
+name: Publish to npm
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+  id-token: write # npm trusted publishing (OIDC) requires this
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: npm
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+
+      # Trusted publishing: no long-lived token, no 2FA. The OIDC identity of
+      # this workflow (repo + environment + ref) is registered on the npm
+      # package via the "Trusted Publisher" panel in package settings.
+      - name: Publish
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: '' # must be empty so npm uses the OIDC token
+          NPM_CONFIG_PROVENANCE: true
+
+      - name: Verify
+        run: npm view ${{ github.event.repository.name }}@${{ github.event.release.tag_name }} dist.tarball
