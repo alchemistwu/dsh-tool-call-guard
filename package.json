@@ -1,0 +1,15 @@
+{
+  "name": "dsh-tool-call-guard",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "src/tool-call-guard.js",
+  "description": "Neutralize tool calls with invalid JSON arguments on the wire, so one malformed model generation cannot brick a session against strict OpenAI-compatible servers (vLLM et al).",
+  "keywords": ["deepseek-harness", "dsh", "dsh-plugin", "vllm", "tool-calls", "llm"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alchemistwu/dsh-tool-call-guard.git"
+  },
+  "author": "Junzheng Wu <alchemistwu0521@gmail.com>",
+  "files": ["src", "README.md", "LICENSE"]
+}
