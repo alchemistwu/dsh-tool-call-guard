@@ -29,7 +29,9 @@
 
 ## 它做什么
 
-拦截 harness 的 `llm/stream` waterfall。对每个 `arguments` 无法通过 `JSON.parse` 的 assistant tool-call 块：
+**消毒跑在 adapter 的消息序列化层**（各 adapter 把 harness 消息转成 wire 格式的地方），对每个请求应用两条规则：
+
+⚠️ **为什么不在 `llm/stream` waterfall 上做？** 我们最初就挂在那里，实测**行不通**：harness 在派发前对整个请求（含 messages）deepFreeze，且 cordis waterfall 的 `next()` **丢弃传给它的参数**——dispatch 闭包永远拿到原始 argv；严格模式 ES module 对冻结对象赋值会 throw。这个 waterfall 实际是**只读的**，文档没有写明（我们用运行时探针验证的）。因此插件在 waterfall 上只做**探测器**（发现非法 arguments 时打 warn），真正中性化在 adapter 序列化层完成。对每个 `arguments` 过不了 `JSON.parse` 的 assistant tool-call 块：
 
 1. **调用变成一条诚实的文本记录**（仅 wire 层）——模型能看到自己当时发出的原文，可以重新发起正确的调用：
    ```
