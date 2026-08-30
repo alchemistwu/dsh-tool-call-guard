@@ -6,6 +6,11 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![dsh-plugin](https://img.shields.io/badge/DSH-plugin-5b50ed.svg)](https://github.com/deepseek-ai/deepseek-harness)
+[![npm](https://img.shields.io/npm/v/dsh-tool-call-guard.svg)](https://www.npmjs.com/package/dsh-tool-call-guard)
+
+```sh
+dsh plugin add dsh-tool-call-guard
+```
 
 ## 为什么需要它
 
