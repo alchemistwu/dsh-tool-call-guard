@@ -75,6 +75,14 @@ dsh plugin --profile desktop add dsh-tool-call-guard
 
 首发场景：vLLM 0.27（`--enable-auto-tool-choice`）部署的 `zai-org/GLM-5.3-Flash`，一次 `web_search` 调用里电影名引号未转义——流式正常、被持久化、之后该 session 每轮 400。装上本插件后 session 复活：毒条目在每次请求中被改写为诚实记录，模型在上下文里能看到自己当时的错误。
 
+## 测试
+
+```sh
+npm test
+```
+
+九个用例覆盖真实生产毒数据、好坏调用混合、协议平衡不变量（wire 上不出现非法 `tool_calls`、不出现孤儿 `role:"tool"`）、退化输入、每请求状态重置。
+
 ## 许可
 
 MIT

@@ -73,6 +73,14 @@ The package declares a `dsh.bundle` patch, so the plugin self-registers on insta
 
 First observed with `zai-org/GLM-5.3-Flash` served by vLLM 0.27 (`--enable-auto-tool-choice`): one `web_search` call with unescaped quotes around a film title streamed through fine, was persisted, and permanently poisoned the session with `400 … arguments must be valid JSON` on every later turn. This plugin keeps that session alive: the poisoned entry is re-expressed per-request, the session continues working, and the model sees its own mistake in context.
 
+## Tests
+
+```sh
+npm test
+```
+
+Nine tests cover the exact production poison, mixed valid/invalid tool calls, protocol-balance invariants (no invalid `tool_calls` and no orphan `role:"tool"` on the wire), degenerate inputs, and per-request state reset.
+
 ## License
 
 MIT
