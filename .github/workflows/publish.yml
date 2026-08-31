@@ -35,4 +35,5 @@ jobs:
           NPM_CONFIG_PROVENANCE: true
 
       - name: Verify
-        run: npm view ${{ github.event.repository.name }}@${{ github.event.release.tag_name }} dist.tarball
+        # tag_name is "v0.1.1" but the npm version is "0.1.1" — strip the v.
+        run: npm view ${{ github.event.repository.name }}@${GITHUB_REF_NAME#v} dist.tarball
