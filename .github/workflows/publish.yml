@@ -20,6 +20,11 @@ jobs:
           node-version: 22
           registry-url: https://registry.npmjs.org
 
+      # Trusted publishing requires npm >= 11.5.1; node 22 ships npm 10.x,
+      # which does not exchange the OIDC token (ENEEDAUTH on publish).
+      - name: Upgrade npm for trusted publishing
+        run: npm install -g npm@latest
+
       # Trusted publishing: no long-lived token, no 2FA. The OIDC identity of
       # this workflow (repo + environment + ref) is registered on the npm
       # package via the "Trusted Publisher" panel in package settings.
